@@ -1,7 +1,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
+- [Use in Rancher RKE Template](#use-in-rancher-rke-template)
 - [Get started with external openstack-cloud-controller-manager in Kubernetes](#get-started-with-external-openstack-cloud-controller-manager-in-kubernetes)
   - [Deploy a Kubernetes cluster with openstack-cloud-controller-manager using kubeadm](#deploy-a-kubernetes-cluster-with-openstack-cloud-controller-manager-using-kubeadm)
     - [Prerequisites](#prerequisites)
@@ -16,6 +16,36 @@
   - [Metrics](#metrics)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Use in Rancher RKE Template
+-- Disclaimer --
+Tested with Rancher v2.5.8, OpenStack Driver and kubernetes Version 1.20.6.
+-- Disclaimer end --
+
+
+Set Cloud Provider to external, edit yaml file to this:
+```
+rancher_kubernetes_engine_config:
+  addons: |-
+    ---
+    apiVersion: v1
+    stringData:
+      cloud.conf: <base64 encoded cloud.conf file>
+    kind: Secret
+    metadata:
+      name: cloud-config
+      namespace: kube-system
+  addons_include:
+    - >-
+      https://raw.githubusercontent.com/kreuzert/cloud-provider-openstack/release-1.20/cluster/addons/rbac/cloud-controller-manager-roles.yaml
+    - >-
+      https://raw.githubusercontent.com/kreuzert/cloud-provider-openstack/release-1.20/cluster/addons/rbac/cloud-controller-manager-role-bindings.yaml
+    - >-
+      https://raw.githubusercontent.com/kreuzert/cloud-provider-openstack/release-1.20/manifests/controller-manager/openstack-cloud-controller-manager-ds.yaml
+  cloud_provider:
+    name: external
+  ...
+```
 
 # Get started with external openstack-cloud-controller-manager in Kubernetes
 
