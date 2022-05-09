@@ -33,6 +33,12 @@ spec:
         effect: NoSchedule
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
+      - key: node-role.kubernetes.io/controlplane
+        effect: NoSchedule
+        value: "true"
+      - key: node-role.kubernetes.io/etcd
+        effect: NoExecute
+        value: "true"
       serviceAccountName: cloud-controller-manager
       containers:
         - name: openstack-cloud-controller-manager
