@@ -65,7 +65,7 @@ spec:
               cpu: 200m
           env:
             - name: CLOUD_CONFIG
-              value: /etc/config/cloud.conf
+              value: /etc/config/cloud-config
       hostNetwork: true
       volumes:
       - hostPath:
